@@ -1,15 +1,17 @@
 <?php
-echo "string";
-// global $wpdb;
-// $myArray = $_REQUEST['jsonString'];
-// $apiArray = json_decode($myArray, true);
-//
-//
-//
-//     foreach ($apiArray as $key => $value) {
-//       $start = $value['start'];
-//       $end = $value['end'];
-//       $sql = $wpdb->insert( "INSERT INTO `nettlau`.`wp_amelia_appointments` (`id`, `status`, `bookingStart`, `bookingEnd`, `notifyParticipants`, `serviceId`, `providerId`, `internalNotes`, `googleCalendarEventId`) VALUES (NULL, 'approved', $start, $end, '0', '1', '1', NULL, NULL)" );
-//     }
+define( 'SHORTINIT', true );
+require_once($_SERVER['DOCUMENT_ROOT'].'/wp-config.php');
+
+global $wpdb;
+$myArray = $_REQUEST['jsonString'];
+$apiArray = json_decode($myArray, true);
+
+    foreach ($apiArray as $key => $value) {
+      $start = $value['start'];
+      $end = $value['end'];
+      $sql = $wpdb->insert('wp_amelia_appointments', array ('id' => NULL, 'status' => 'approved', 'bookingStart' => $start, 'bookingEnd' => $end, 'notifyParticipants' => '0', 'serviceId' => '1', 'providerId' => '1', 'internalNotes' => 'freeBusy'
+));
+
+    }
 
 ?>

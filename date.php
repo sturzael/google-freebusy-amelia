@@ -1,10 +1,9 @@
 <?php
 $myArray = $_REQUEST['jsonString'];
-$someArray = json_decode($myArray, true);
-foreach ($variable as $key => $value) {
-  // code...
-}
-  print_r($someArray[0]['start']);
+$apiArray = json_decode($myArray, true);
 
+    foreach ($apiArray as $key => $value) {
+      echo $value["start"] . ", " . $value["end"] . "<br>";
+    }
 
 ?>

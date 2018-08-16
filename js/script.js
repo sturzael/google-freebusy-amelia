@@ -1,4 +1,5 @@
-var strreplace, final, result, APIKey, strreplaceend, finalend, resultend;
+var APIKey, EndDate, StartDate;
+var arr = [];
 
 $.ajax({
   url: "./data.json",
@@ -33,20 +34,16 @@ function start() {
     }
   })
 }
-var arr = [];
+
 
 function list(DataFromJson) {
   var busydates = DataFromJson.calendars['elliot.sturzaker@nettl.com'].busy
   for (var i = 0; i < busydates.length; i++) {
-    result = busydates[i].start.split('T')[1];
-    strreplace = result.replace(/(^[^:]*:[^:]*)/igm, '');
-    final = result.replace(strreplace, '');
-    resultend = busydates[i].end.split('T')[1];
-    strreplaceend = resultend.replace(/(^[^:]*:[^:]*)/igm, '');
-    finalend = resultend.replace(strreplaceend, '');
+    StartDate = busydates[i].start.substr(0, busydates[i].start.indexOf('+')).replace('T', ' ');
+    EndDate = busydates[i].end.substr(0, busydates[i].end.indexOf('+')).replace('T', ' ');
     arr.push({
-      'start': final,
-      'end': finalend
+      'start': StartDate,
+      'end': EndDate
     });
 
   }

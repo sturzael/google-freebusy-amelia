@@ -13,8 +13,17 @@ $apiArray = json_decode($myArray, true); //decode the json into a php array
       $start = date('Y-m-d H:i:s', strtotime( "$start - 10 hours")); //converting the time in NZ to GMT +2 as WP_Amelia uses Serbia timezones to read it
       $end = date('Y-m-d H:i:s', strtotime( "$end - 10 hours"));//converting the time in NZ to GMT +2 as WP_Amelia uses Serbia timezones to read it
       $count = $wpdb->get_var("SELECT * FROM `wp_amelia_appointments` WHERE `bookingStart` = '$start'  AND `bookingEnd` = '$end'"); //checking wether it already exists in the database
+
+      
+      $notCal = $wpdb->get_col("SELECT * FROM `wp_amelia_appointments` WHERE `bookingStart` <> '$start' AND `bookingEnd` <> '$end' AND `internalNotes` = 'freeBusy' AND `serviceId` = 4");
+
+      foreach ($notCal as $key => $value) {
+        $sql = $wpdb->delete('wp_amelia_appointments', array ('id' => $value));
+      }
+
+
       if ($count < 1) { //if it doesnt exist run this
-        $sql = $wpdb->insert('wp_amelia_appointments', array ('id' => NULL, 'status' => 'approved', 'bookingStart' => $start, 'bookingEnd' => $end, 'notifyParticipants' => '0', 'serviceId' => '1', 'providerId' => '1', 'internalNotes' => 'freeBusy'
+        $sql = $wpdb->insert('wp_amelia_appointments', array ('id' => NULL, 'status' => 'approved', 'bookingStart' => $start, 'bookingEnd' => $end, 'notifyParticipants' => '0', 'serviceId' => '4', 'providerId' => '1', 'internalNotes' => 'freeBusy'
       ));//insert the appointment
         $lastid =  $wpdb->insert_id; //grab the ID as the two tables need to be linked together
         $sql = $wpdb->insert('wp_amelia_customer_bookings', array ('id' => NULL, 'appointmentId' => $lastid, 'customerId' => '5', 'status' => 'approved', 'price' => '0', 'persons' => '1')); //insert the front end booking and link the ID's together.

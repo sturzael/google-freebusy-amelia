@@ -1,6 +1,7 @@
 <?php
 $items = array();
 $itemsToCompare = array();
+$i = 0;
 
 define( 'SHORTINIT', true );
 require_once($_SERVER['DOCUMENT_ROOT'].'/wp-config.php'); //Calling everything needed to make the querys.
@@ -11,19 +12,28 @@ $myArray = $_REQUEST['jsonString']; //setting myarray variable as the dates spec
 $apiArray = json_decode($myArray, true); //decode the json into a php array
 $notCal = $wpdb->get_results("SELECT * FROM `wp_amelia_appointments` WHERE `internalNotes` = 'freeBusy' AND `serviceId` = 4" , ARRAY_A);
 
-
+$i == 0;
+$j == 0;
 foreach($notCal as $row){
     $itemsToCompare[] = $row['bookingStart'];
+    $i++;
 }
 
 //pushing start times inside an array
 foreach ($apiArray as $startTime) {
   $items[] = $startTime['start'];
+  $j++;
 }
 
+// if ($i > $j) {
+//   // i is bigger
+//   print_r($itemsToCompare);
+// }else {
+//   print_r($items);
+// }
 
-$diff = array_diff($itemsToCompare,$items);
-print_r($diff);
+// $diff = array_values($items);
+// print_r($diff);
 
 
 

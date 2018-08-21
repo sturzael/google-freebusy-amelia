@@ -1,0 +1,10 @@
+
+Your Nettl MySQL database details are as follows. 
+
+Database Type: MySQL
+Database Host: w3pcloud-ap-southeast-2-live.ca83oxrfowfr.ap-southeast-2.rds.amazonaws.com
+Database Username: nettlau
+Database Password: 0767a88ed2266022
+Database Name: nettlau
+
+Created on : Wed Mar 21 01:35:14 GMT 2018

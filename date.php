@@ -1,7 +1,6 @@
 <?php
 $bob = array();
 $itemsToCompare = array();
-$i = 0;
 
 define( 'SHORTINIT', true );
 require_once($_SERVER['DOCUMENT_ROOT'].'/wp-config.php'); //Calling everything needed to make the querys.
@@ -15,6 +14,8 @@ $apiArray = json_decode($myArray, true); //decode the json into a php array
 $notCal = $wpdb->get_results("SELECT * FROM `wp_amelia_appointments` WHERE `internalNotes` = 'freeBusy' AND `serviceId` = 4" , ARRAY_A);
 
 
+
+
   foreach($notCal as $row){
       $itemsToCompare[] = $row['bookingStart'];
   }
@@ -22,38 +23,12 @@ $notCal = $wpdb->get_results("SELECT * FROM `wp_amelia_appointments` WHERE `inte
       $bob[] = $rows['start'];
   }
 
-// $bob = str_replace(" ",'""',$items);
-// $v = var_export($itemsToCompare, true);
-// $c = var_export($items, true);
-
-// echo $v;
-// // echo "<br> <br>";
-
-print_r($bob);
-echo "<br> <br>";
-print_r($itemsToCompare);
-echo "<br> <br>";
-$result = array_diff($itemsToCompare, $bob);
-print_r ($result);
-
-// $bob = implode( '""', $items);
-// // $bob = implode('""', $itemsToCompare);
-// $great = '"'.$bob.'"';
-// print_r(gettype($great));
-
-// echo "<br> 2 <br>";
-// $here = implode( '""', $itemsToCompare);
-// // $here = implode('""', $itemsToCompare);
-// // $realGood = '"'.$here.'"';
-// // print_r(gettype($realGood));
-// // echo "<br> 3 <br>";
-// print_r($items);
-// echo "<br> break <br>";
+// print_r($bob);
+// echo "<br> <br>";
 // print_r($itemsToCompare);
-// echo "<br> break <br>";
-// $result = array_diff($items,$itemsToCompare);
-// print_r($result);
-
+// echo "<br> <br>";
+// $result = array_diff($itemsToCompare, $bob);
+// print_r ($result);
 
 
     foreach ($apiArray as $key => $value) { //for each item in the array run the the following

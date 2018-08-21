@@ -3,7 +3,6 @@ var arr = []; //empty array
 var currentDate = new Date(); //current dates
 var endDate = new Date();
 
-console.log("hello");
 
 endDate.setDate(currentDate.getDate() + 31); //set end date as the current date + a month
 endDate.setMilliseconds(0); //remove milliseconds

@@ -21,15 +21,11 @@ foreach ($apiArray as $rows) {
   $googleArray[] = $rows['start'];
 }
 
-
-
 $result = array_diff($databaseArray, $googleArray);
-
 
 foreach ($result as $itemtoremove) {
   $sql = $wpdb->delete('wp_amelia_appointments', array ('bookingStart' => $itemtoremove));
 }
-
 
 foreach ($apiArray as $key => $value) { //for each item in the array run the the following
 

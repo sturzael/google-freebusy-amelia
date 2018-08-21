@@ -15,7 +15,6 @@ $notCal = $wpdb->get_results("SELECT * FROM `wp_amelia_appointments` WHERE `inte
 
 
 
-
   foreach($notCal as $row){
       $itemsToCompare[] = $row['bookingStart'];
   }

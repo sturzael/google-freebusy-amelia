@@ -15,14 +15,13 @@ $apiArray = json_decode($myArray, true); //decode the json into a php array
 $notCal = $wpdb->get_results("SELECT * FROM `wp_amelia_appointments` WHERE `internalNotes` = 'freeBusy' AND `serviceId` = 4" , ARRAY_A);
 
 
-
-
   foreach($notCal as $row){
       $itemsToCompare[] = $row['bookingStart'];
   }
   foreach($apiArray as $rows){
       $bob[] = $rows['start'];
   }
+
 // $bob = str_replace(" ",'""',$items);
 // $v = var_export($itemsToCompare, true);
 // $c = var_export($items, true);

@@ -16,7 +16,7 @@ $notCal = $wpdb->get_results("SELECT * FROM `wp_amelia_appointments` WHERE `inte
 
 foreach ($notCal as $row) {
   $bookingTime = $row['bookingStart'];
-  // $bookingTime = date('Y-m-d H:i:s', strtotime( "$bookingTime + 10 hours"));
+  $bookingTime = date('Y-m-d H:i:s', strtotime( "$bookingTime + 10 hours"));
   $databaseArray[] = $bookingTime;
 }
 
@@ -25,6 +25,8 @@ foreach ($apiArray as $rows) {
 }
 
 $result = array_diff($databaseArray, $googleArray);
+
+// echo "database now + ";
 // print_r($databaseArray);
 // print_r($googleArray);
 

@@ -15,13 +15,18 @@ $apiArray = json_decode($myArray, true); //decode the json into a php array
 $notCal = $wpdb->get_results("SELECT * FROM `wp_amelia_appointments` WHERE `internalNotes` = 'freeBusy' AND `serviceId` = 4", ARRAY_A);
 
 foreach ($notCal as $row) {
-  $databaseArray[] = $row['bookingStart'];
+  $bookingTime = $row['bookingStart'];
+  // $bookingTime = date('Y-m-d H:i:s', strtotime( "$bookingTime + 10 hours"));
+  $databaseArray[] = $bookingTime;
 }
+
 foreach ($apiArray as $rows) {
   $googleArray[] = $rows['start'];
 }
 
 $result = array_diff($databaseArray, $googleArray);
+// print_r($databaseArray);
+// print_r($googleArray);
 
 foreach ($result as $itemtoremove) {
   $sql = $wpdb->delete('wp_amelia_appointments', array ('bookingStart' => $itemtoremove));
@@ -33,10 +38,9 @@ foreach ($apiArray as $key => $value) { //for each item in the array run the the
         $end   = $value['end']; //setting $end as the start date specified in the array
         $count = 0; //set count as 0 to be used later
 
-        // $start = date('Y-m-d H:i:s', strtotime( "$start - 10 hours")); //converting the time in NZ to GMT +2 as WP_Amelia uses Serbia timezones to read it
+        $start = date('Y-m-d H:i:s', strtotime( "$start - 10 hours")); //converting the time in NZ to GMT +2 as WP_Amelia uses Serbia timezones to read it
 
-        // $end = date('Y-m-d H:i:s', strtotime( "$end - 10 hours"));//converting the time in NZ to GMT +2 as WP_Amelia uses Serbia timezones to read it
-
+        $end = date('Y-m-d H:i:s', strtotime( "$end - 10 hours"));//converting the time in NZ to GMT +2 as WP_Amelia uses Serbia timezones to read it
 
         $count = $wpdb->get_var("SELECT * FROM `wp_amelia_appointments` WHERE `bookingStart` = '$start'  AND `bookingEnd` = '$end'"); //checking wether it already exists in the database
 

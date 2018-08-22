@@ -1,5 +1,5 @@
 <?php
-$googleArray = array();
+$googleArray = array(); //used for delete functions
 $databaseArray = array();
 
 define('SHORTINIT', true);
@@ -12,28 +12,27 @@ $myArray = $_REQUEST['jsonString']; //setting myarray variable as the dates spec
 
 $apiArray = json_decode($myArray, true); //decode the json into a php array
 
-$notCal = $wpdb->get_results("SELECT * FROM `wp_amelia_appointments` WHERE `internalNotes` = 'freeBusy' AND `serviceId` = 4", ARRAY_A);
+//DELETING FROM DATABASE IF IT HAS BEEN DELETED IN GOOGLE CALENDAR
 
-foreach ($notCal as $row) {
-  $bookingTime = $row['bookingStart'];
-  $bookingTime = date('Y-m-d H:i:s', strtotime( "$bookingTime + 10 hours"));
-  $databaseArray[] = $bookingTime;
+$notCal = $wpdb->get_results("SELECT * FROM `wp_amelia_appointments` WHERE `internalNotes` = 'freeBusy' AND `serviceId` = 4", ARRAY_A); //Get all the appointments that have been creataed by this program.
+
+foreach ($notCal as $row) { //adding only the start times from the database to an array called databaseArray
+  $databaseArray[] = $row['bookingStart'];
 }
 
-foreach ($apiArray as $rows) {
-  $googleArray[] = $rows['start'];
+foreach ($apiArray as $rows) { //adding only the start times from google into an array
+  $formattedItem = $rows['start'];
+  $formattedItem = date('Y-m-d H:i:s', strtotime( "$formattedItem - 10 hours")); //gotta convert times from google so that it mathces the time format used in the db
+  $googleArray[] =  $formattedItem;
 }
 
-$result = array_diff($databaseArray, $googleArray);
+$result = array_diff($databaseArray, $googleArray); //getting the differance between the two start times - this way i can see what items were in google calendar and the db but have been since deleted.
 
-// echo "database now + ";
-// print_r($databaseArray);
-// print_r($googleArray);
-
-foreach ($result as $itemtoremove) {
-  $sql = $wpdb->delete('wp_amelia_appointments', array ('bookingStart' => $itemtoremove));
+foreach ($result as $itemtoremove) { //for every difference in the array do this
+  $sql = $wpdb->delete('wp_amelia_appointments', array ('bookingStart' => $itemtoremove)); //delete each row that matches the booking start
 }
 
+//ADDING TO DATABASE
 foreach ($apiArray as $key => $value) { //for each item in the array run the the following
 
         $start = $value['start']; //setting $start as the start date specified in the array

@@ -14,7 +14,7 @@ $apiArray = json_decode($myArray, true); //decode the json into a php array
 
 //DELETING FROM DATABASE IF IT HAS BEEN DELETED IN GOOGLE CALENDAR
 
-$notCal = $wpdb->get_results("SELECT * FROM `wp_amelia_appointments` WHERE `internalNotes` = 'freeBusy' AND `serviceId` = 4", ARRAY_A); //Get all the appointments that have been creataed by this program.
+$notCal = $wpdb->get_results("SELECT * FROM `wp_amelia_appointments` WHERE `internalNotes` = 'freeBusy' AND `serviceId` = 4", ARRAY_A); //Get all the appointments that have been creataed by this program. CHANGE SERVICE ID TO WHATEVER SERVICE ID YOU HAVE SET BELOW
 
 foreach ($notCal as $row) { //adding only the start times from the database to an array called databaseArray
   $databaseArray[] = $row['bookingStart'];
@@ -47,25 +47,25 @@ foreach ($apiArray as $key => $value) { //for each item in the array run the the
 
         if ($count < 1) { //if it doesnt exist run this
                 $sql = $wpdb->insert('wp_amelia_appointments', array(
-                  'id' => NULL,
-                  'status' => 'approved',
-                  'bookingStart' => $start,
-                  'bookingEnd' => $end,
-                  'notifyParticipants' => '0',
-                  'serviceId' => '4',
-                  'providerId' => '1',
-                  'internalNotes' => 'freeBusy'
+                  'id' => NULL, //DON'T CHANGE THIS AS THIS WILL AUTO INCREMENT ITSELF
+                  'status' => 'approved', //Approved is probably the best option, if you change to pending you will have to manually approve
+                  'bookingStart' => $start, //DON'T CHANGE
+                  'bookingEnd' => $end, // DON'T CHANGE
+                  'notifyParticipants' => '0', //DON'T CHANGE UNLESS YOU WANT TO SEND EMAILS TO CUSTOMER / SERVICE PROVIDER - CHANGE TO 1 IF YOU WANT THAT
+                  'serviceId' => '4', // MAKE A NEW SERVICE OR SOMETHING CALLED BUSY AND GRAB THE ID FROM: wp_amelia_services
+                  'providerId' => '1', //MAKE A NEW EMPLOYEE OR WHOEVER'S CALENDAR IS LINKED UP AND THEN GRAB THE ID FROM: wp_amelia_users
+                  'internalNotes' => 'freeBusy' //DON'T CHANGE
                 )); //insert the appointment
 
                 $lastid = $wpdb->insert_id; //grab the ID as the two tables need to be linked together
 
                 $sql = $wpdb->insert('wp_amelia_customer_bookings', array(
-                  'id' => NULL,
-                  'appointmentId' => $lastid,
-                  'customerId' => '5',
-                  'status' => 'approved',
-                  'price' => '0',
-                  'persons' => '1'
+                  'id' => NULL, //DON'T CHANGE THIS AS THIS WILL AUTO INCREMENT ITSELF
+                  'appointmentId' => $lastid, // DON'T CHANGE THIS
+                  'customerId' => '8', //GET WHATEVER CUSTOMER ID YOU WANT FROM: wp_amelia_users - make sure it is a 'type = customer'
+                  'status' => 'approved', //Approved is probably the best option, if you change to pending you will have to manually approve
+                  'price' => '0', //LEAVE AS 0
+                  'persons' => '1' //1 is fine, or change to whatever.
                 )); //insert the front end booking and link the ID's together.
         };
 }

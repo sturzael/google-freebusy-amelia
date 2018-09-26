@@ -3,6 +3,7 @@ var arr = []; //empty array
 var currentDate = new Date(); //current dates
 var endDate = new Date();
 
+
 endDate.setDate(currentDate.getDate() + 31); //set end date as the current date + a month
 endDate.setMilliseconds(0); //remove milliseconds
 endTime = endDate.toISOString(); //convert to iso formatted end date
@@ -23,12 +24,13 @@ jQuery(document).ready(function($) { //once jquery has been loaded
     },
     success: function(DataFromJson) {
       APIKey = DataFromJson.apikey; //This variable will equal the apikey pulled from the json file
-      start(); //run start
+      start(); //run startm
     },
     error: function() {
       console.log("Something Went Wrong");
     }
   })
+
 
   function start() {
     $.ajax({ //this request pulls the freebusy times in an array using the apikey pulled from beforehand
@@ -46,9 +48,11 @@ jQuery(document).ready(function($) { //once jquery has been loaded
     })
   }
 
+
   function list(DataFromJson) {
     var busydates = DataFromJson.calendars['elliot.sturzaker@nettl.com'].busy //this will grab the array details, i reccomend logging the datafromjson so you can see it for yourself.
-    for (var i = 0; i < busydates.length; i++) { //loop through all the freebusy results, this will run for each event you have
+    for (var i = 0; i < busydates.length; i++) {
+   //loop through all the freebusy results, this will run for each event you have
       startDate = busydates[i].start.substr(0, busydates[i].start.indexOf('+')).replace('T', ' '); //make the date into a readable db format
       endDate = busydates[i].end.substr(0, busydates[i].end.indexOf('+')).replace('T', ' '); //make the date into a readable db format
       arr.push({ //push the start and end dates into an array
@@ -65,8 +69,9 @@ jQuery(document).ready(function($) { //once jquery has been loaded
         jsonString: jsonString //post through the array to date.php so i can access it there
       },
       success: function(data) {
-        $('body').append(data) //append date.php
+        $('body').append(data)
       }
     });
+
   }
 });

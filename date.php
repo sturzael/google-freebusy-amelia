@@ -29,46 +29,45 @@ foreach ($apiArray as $rows) {
   $formattedItem = date('Y-m-d H:i:s', strtotime( "$formattedItem - 10 hours"));
   $googleArray[] =  $formattedItem;
 }
-
-
+//
+//
 function daylightSavings($unixTime){
-  
+
         $startDST =  date('Y-m-d H:i:s', strtotime('first sunday of April ' .  date("Y", strtotime('+1 years')))) . "\n";
         $currentStartDST =  date('Y-m-d H:i:s', strtotime('first sunday of April ' .  date("Y"))) . "\n";
         $endDST =  date('Y-m-d H:i:s', strtotime('last sunday of September ' .  date("Y"))) . "\n";
         $currentEndDST =  date('Y-m-d H:i:s', strtotime('last sunday of September ' .  date("Y", strtotime('-1 years')))) . "\n";
 
         if($unixTime < $startDST && $unixTime > $endDST) {
-          echo 'We are in DST';
+          echo "We are in DST";
         }elseif ($unixTime < $endDST && $unixTime > $currentStartDST) {
           echo 'We are not in DST';
         }elseif ($unixTime < $currentStartDST && $unixTime > $currentEndDST) {
           echo 'We are in DST';
+        }else {
+          echo "Something Went Wrong";
         }
 }
-
-daylightSavings();
-
-
+//
 $result = array_diff($databaseArray, $googleArray);
 
 foreach ($result as $itemtoremove) {
   $sql = $wpdb->delete('wp_amelia_appointments', array ('bookingStart' => $itemtoremove));
 }
-
+//
 foreach ($apiArray as $key => $value) {
 
         $start = $value['start'];
         $end   = $value['end'];
         $count = 0;
 
-        $start = date('Y-m-d H:i:s', strtotime( "$start - 12 hours")); /
+        $start = date('Y-m-d H:i:s', strtotime( "$start - 12 hours"));
 
         $end = date('Y-m-d H:i:s', strtotime( "$end - 12 hours"));
 
         $count = $wpdb->get_var("SELECT * FROM `wp_amelia_appointments` WHERE `bookingStart` = '$start'  AND `bookingEnd` = '$end'");
 
-        if ($count < 1) { //if it doesnt exist run this
+        // if ($count < 1) { //if it doesnt exist run this
                 // $sql = $wpdb->insert('wp_amelia_appointments', array(
                 //   'id' => NULL, //DON'T CHANGE THIS AS THIS WILL AUTO INCREMENT ITSELF
                 //   'status' => 'approved', //Approved is probably the best option, if you change to pending you will have to manually approve
@@ -90,6 +89,6 @@ foreach ($apiArray as $key => $value) {
                 //   'price' => '0', //LEAVE AS 0
                 //   'persons' => '1' //1 is fine, or change to whatever.
                 // )); //insert the front end booking and link the ID's together.
-        };
+        // };
 }
-?>
+// ?>
